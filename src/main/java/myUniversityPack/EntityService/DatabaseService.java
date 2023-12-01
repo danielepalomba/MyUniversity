@@ -5,6 +5,7 @@ import java.util.Collection;
 public interface DatabaseService<T> {
     public boolean doSave(T t);
     public boolean remove(T t);
-    public T findById(int id);
+    default T findById(long id){return null;}
+    public T findById(String matricola);
     public Collection<T> findAll();
 }

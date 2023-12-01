@@ -3,38 +3,43 @@ package myUniversityPack.Entity;
 import myUniversityPack.DbUtil.DriverManagerConnectionPool;
 import myUniversityPack.EntityService.DatabaseService;
 
-import javax.swing.*;
-import java.sql.*;
-import java.util.Collection;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Studente{
-    private int id;
+    private String matricola;
     private String nome;
     private String cognome;
+    private String indirizzo;
+    private String cellulare;
     private Date data_di_nascita;
-    private String email;
-    private String matricola;
+    private Date data_di_immatricolazione;
     private int id_dipartimento;
-    private int id_credenziali;
+    private Credenziali credenziali;
+    private List<EsameStudente> esami;
 
-    public Studente(String nome, String cognome, Date data_di_nascita, String email, String matricola, int id_dipartimento, int id_credenziali) {
+    public Studente() {
+    }
+
+    public Studente(String matricola, String nome, String cognome, String indirizzo, String cellulare, Date data_di_nascita, Date data_di_immatricolazione, int id_dipartimento) {
+        this.matricola = matricola;
         this.nome = nome;
         this.cognome = cognome;
+        this.indirizzo = indirizzo;
+        this.cellulare = cellulare;
         this.data_di_nascita = data_di_nascita;
-        this.email = email;
-        this.matricola = matricola;
+        this.data_di_immatricolazione = data_di_immatricolazione;
         this.id_dipartimento = id_dipartimento;
-        this.id_credenziali = id_credenziali;
+        this.esami = new ArrayList<>();
     }
 
-    public Studente(){}
-
-    public int getId() {
-        return id;
+    public String getMatricola() {
+        return matricola;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setMatricola(String matricola) {
+        this.matricola = matricola;
     }
 
     public String getNome() {
@@ -53,6 +58,22 @@ public class Studente{
         this.cognome = cognome;
     }
 
+    public String getIndirizzo() {
+        return indirizzo;
+    }
+
+    public void setIndirizzo(String indirizzo) {
+        this.indirizzo = indirizzo;
+    }
+
+    public String getCellulare() {
+        return cellulare;
+    }
+
+    public void setCellulare(String cellulare) {
+        this.cellulare = cellulare;
+    }
+
     public Date getData_di_nascita() {
         return data_di_nascita;
     }
@@ -61,20 +82,12 @@ public class Studente{
         this.data_di_nascita = data_di_nascita;
     }
 
-    public String getEmail() {
-        return email;
+    public Date getData_di_immatricolazione() {
+        return data_di_immatricolazione;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getMatricola() {
-        return matricola;
-    }
-
-    public void setMatricola(String matricola) {
-        this.matricola = matricola;
+    public void setData_di_immatricolazione(Date data_di_immatricolazione) {
+        this.data_di_immatricolazione = data_di_immatricolazione;
     }
 
     public int getId_dipartimento() {
@@ -85,25 +98,35 @@ public class Studente{
         this.id_dipartimento = id_dipartimento;
     }
 
-    public int getId_credenziali() {
-        return id_credenziali;
+    public List<EsameStudente> getEsami() {
+        return esami;
     }
 
-    public void setId_credenziali(int id_credenziali) {
-        this.id_credenziali = id_credenziali;
+    public void setEsami(List<EsameStudente> esami) {
+        this.esami = esami;
+    }
+
+    public Credenziali getCredenziali() {
+        return credenziali;
+    }
+
+    public void setCredenziali(Credenziali credenziali) {
+        this.credenziali = credenziali;
     }
 
     @Override
     public String toString() {
         return "Studente{" +
-                "id=" + id +
+                "matricola='" + matricola + '\'' +
                 ", nome='" + nome + '\'' +
                 ", cognome='" + cognome + '\'' +
+                ", indirizzo='" + indirizzo + '\'' +
+                ", cellulare='" + cellulare + '\'' +
                 ", data_di_nascita=" + data_di_nascita +
-                ", email='" + email + '\'' +
-                ", matricola='" + matricola + '\'' +
+                ", data_di_immatricolazione=" + data_di_immatricolazione +
                 ", id_dipartimento=" + id_dipartimento +
-                ", id_credenziali=" + id_credenziali +
+                ", credenziali=" + credenziali +
+                ", esami=" + esami +
                 '}';
     }
 }
