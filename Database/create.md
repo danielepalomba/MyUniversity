@@ -1,4 +1,5 @@
 # MyUniversity DB
+
 ```
 DROP DATABASE IF EXISTS MyUniversity;
 
@@ -6,41 +7,81 @@ CREATE DATABASE MyUniversity;
 
 USE MyUniversity;
 
-CREATE TABLE Studente (
-    id INT PRIMARY KEY,
-    nome VARCHAR(50),
-    cognome VARCHAR(50),
-    data_di_nascita DATE,
-    Email VARCHAR(100),
-    matricola VARCHAR(20),
-    id_dipartimento INT,
-    id_credenziali INT,
-    FOREIGN KEY (id_dipartimento) REFERENCES Dipartimento(codice),
-    FOREIGN KEY (id_credenziali) REFERENCES Credenziali(id)
+CREATE TABLE DIPARTIMENTO(
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    NOME VARCHAR(60) NOT NULL,
+    UNIQUE(NOME),
+    EDIFICIO VARCHAR(20) NOT NULL
 );
 
-CREATE TABLE Dipartimento (
-    codice INT PRIMARY KEY,
-    nome VARCHAR(50),
-    locazione VARCHAR(100)
+CREATE TABLE ESAME(
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    NOME VARCHAR(60) NOT NULL,
+    CFU INT NOT NULL,
+    ORE_TEORIA INT NOT NULL,
+    ORE_LABORATORIO INT NOT NULL,
+    ID_DIPARTIMENTO INT NOT NULL,
+    FOREIGN KEY(ID_DIPARTIMENTO) REFERENCES DIPARTIMENTO(ID)
 );
 
-CREATE TABLE Credenziali (
-    id INT PRIMARY KEY,
-    username VARCHAR(50),
-    password VARCHAR(50),
-    UNIQUE (username)
+CREATE TABLE STUDENTE(
+    MATRICOLA CHAR(10) PRIMARY KEY,
+    NOME VARCHAR(50) NOT NULL,
+    COGNOME VARCHAR(50) NOT NULL,
+    INDIRIZZO VARCHAR(100) NOT NULL,
+    CELLULARE CHAR(10) NOT NULL,
+    DATA_DI_NASCITA DATE NOT NULL,
+    DATA_IMMATRICOLAZIONE DATE NOT NULL,
+    ID_DIPARTIMENTO INT NOT NULL,
+    FOREIGN KEY(ID_DIPARTIMENTO) REFERENCES DIPARTIMENTO(ID)
 );
 
-CREATE TABLE Esame (
-    id INT PRIMARY KEY,
-    nome VARCHAR(100),
-    cfu INT,
-    votazione DECIMAL(3, 1),
-    id_dipartimento INT,
-    data_svolgimento DATE,
-    anno INT,
-    semestre INT,
-    FOREIGN KEY (id_dipartimento) REFERENCES Dipartimento(codice)
+CREATE TABLE CREDENZIALI(
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    USERNAME VARCHAR(60) NOT NULL,
+    PASSWORD VARCHAR(60) NOT NULL,
+    MATRICOLA_STUDENTE CHAR(10),
+    FOREIGN KEY(MATRICOLA_STUDENTE) REFERENCES STUDENTE(MATRICOLA)
 );
+
+CREATE TABLE STUDENTE_ESAME(
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    MATRICOLA_STUDENTE CHAR(10) NOT NULL,
+    ID_ESAME INT NOT NULL,
+    FOREIGN KEY (MATRICOLA_STUDENTE) REFERENCES STUDENTE(MATRICOLA),
+    FOREIGN KEY (ID_ESAME) REFERENCES ESAME(ID)
+);
+
+DELIMITER //
+
+CREATE PROCEDURE AggiungiStudenteEsame (
+    IN studente_matricola CHAR(10),
+    IN esame_id INT
+)
+BEGIN
+    DECLARE studente_dipartimento INT;
+    DECLARE esame_dipartimento INT;
+
+    -- Ottieni il dipartimento dello studente
+    SELECT ID_DIPARTIMENTO INTO studente_dipartimento
+    FROM STUDENTE
+    WHERE MATRICOLA = studente_matricola;
+
+    -- Ottieni il dipartimento dell'esame
+    SELECT ID_DIPARTIMENTO INTO esame_dipartimento
+    FROM ESAME
+    WHERE ID = esame_id;
+
+    -- Controlla se i dipartimenti sono diversi e lancia un messaggio di errore
+    IF studente_dipartimento != esame_dipartimento THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Lo studente e l''esame appartengono a dipartimenti diversi!';
+    ELSE
+        -- Aggiungi i nuovi dati se i dipartimenti sono gli stessi
+        INSERT INTO STUDENTE_ESAME (MATRICOLA_STUDENTE, ID_ESAME)
+        VALUES (studente_matricola, esame_id);
+    END IF;
+END //
+
+DELIMITER ;
 ```
