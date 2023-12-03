@@ -1,6 +1,6 @@
 package myUniversityPack.EntityService;
 
-import com.mysql.cj.protocol.x.ResultMessageListener;
+
 import myUniversityPack.DbUtil.DriverManagerConnectionPool;
 import myUniversityPack.Entity.Credenziali;
 import myUniversityPack.Entity.EsameStudente;
@@ -13,7 +13,8 @@ import java.util.Collection;
 import java.util.List;
 
 public class StudenteService implements DatabaseService<Studente>{
-
+    private CredenzialiService cs = new CredenzialiService();
+    private EsameStudenteService es = new EsameStudenteService();
     @Override
     public boolean doSave(Studente studente) {
         String query = "INSERT INTO STUDENTE (MATRICOLA, NOME, COGNOME, INDIRIZZO, CELLULARE, DATA_DI_NASCITA, DATA_IMMATRICOLAZIONE, ID_DIPARTIMENTO) VALUES (?,?,?,?,?,?,?,?)";
@@ -56,11 +57,6 @@ public class StudenteService implements DatabaseService<Studente>{
     }
 
     @Override
-    public Studente findById(long id) {
-        return this.findById(Long.toString(id));
-    }
-
-    @Override
     public Studente findById(String matricola) {
         String query = "SELECT * FROM STUDENTE WHERE STUDENTE.MATRICOLA = ?";
         Studente s = null;
@@ -69,7 +65,7 @@ public class StudenteService implements DatabaseService<Studente>{
                 stm.setString(1, matricola);
                 try(ResultSet rs = stm.executeQuery()){
                     while(rs.next()){
-                        String matrcola = rs.getString("MATRICOLA");
+                        String matricola_s = rs.getString("MATRICOLA");
                         String nome = rs.getString("NOME");
                         String cognome = rs.getString("COGNOME");
                         String indirizzo = rs.getString("INDIRIZZO");
@@ -78,59 +74,14 @@ public class StudenteService implements DatabaseService<Studente>{
                         Date data_immatricolazione = rs.getDate("DATA_IMMATRICOLAZIONE");
                         int id_dipartimento = rs.getInt("ID_DIPARTIMENTO");
                         s = new Studente(matricola, nome, cognome, indirizzo, cellulare, data_di_nascita, data_immatricolazione,id_dipartimento);
-                        s.setCredenziali(this.getCredenziali(s.getMatricola()));
-                        s.setEsami(this.getEsami(s.getMatricola()));
+                        s.setCredenziali(cs.retrieveByStudente(matricola_s));
+                        s.setEsami((List<EsameStudente>) es.retrieveByMatricola(matricola_s));
                     }
                     return s;
                 }
             }
         }catch (SQLException e){
             JOptionPane.showMessageDialog(null, e.getMessage());
-        }
-        return null;
-    }
-
-    private Credenziali getCredenziali(String matricola){
-        String query = "SELECT * FROM CREDENZIALI WHERE MATRICOLA_STUDENTE = ?";
-        Credenziali credenziali = null;
-        try(Connection c = DriverManagerConnectionPool.getConnection()){
-            try(PreparedStatement stm = c.prepareStatement(query)){
-                stm.setString(1, matricola);
-                try(ResultSet rs = stm.executeQuery()){
-                    while(rs.next()){
-                        String username = rs.getString("USERNAME");
-                        String password = rs.getString("PASSWORD");
-                        String matricola_studente = rs.getString("MATRICOLA_STUDENTE");
-                        credenziali = new Credenziali(username, password, matricola_studente);
-                    }
-                    return credenziali;
-                }
-            }
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private List<EsameStudente> getEsami(String matricola){
-        String query = "SELECT * FROM STUDENTE_ESAME WHERE MATRICOLA_STUDENTE = ?";
-        List<EsameStudente> lista = new ArrayList<>();
-        try(Connection c = DriverManagerConnectionPool.getConnection()) {
-            try(PreparedStatement stm = c.prepareStatement(query)) {
-                stm.setString(1, matricola);
-                try(ResultSet rs = stm.executeQuery()) {
-                    while(rs.next()){
-                        EsameStudente es = new EsameStudente();
-                        es.setId(rs.getInt("ID"));
-                        es.setMatricola_studente(rs.getString("MATRICOLA_STUDENTE"));
-                        es.setId_esame(rs.getInt("ID_ESAME"));
-                        lista.add(es);
-                    }
-                    return lista;
-                }
-            }
-        }catch (SQLException e){
-            e.printStackTrace();
         }
         return null;
     }
@@ -152,15 +103,15 @@ public class StudenteService implements DatabaseService<Studente>{
                         s.setData_di_nascita(rs.getDate("DATA_DI_NASCITA"));
                         s.setData_di_immatricolazione(rs.getDate("DATA_IMMATRICOLAZIONE"));
                         s.setId_dipartimento(rs.getInt("ID_DIPARTIMENTO"));
-                        s.setCredenziali(this.getCredenziali(s.getMatricola()));
-                        s.setEsami(this.getEsami(s.getMatricola()));
+                        s.setCredenziali(cs.retrieveByStudente(s.getMatricola()));
+                        s.setEsami((List<EsameStudente>) es.retrieveByMatricola(s.getMatricola()));
                         lista.add(s);
                     }
                     return lista;
                 }
             }
         }catch (SQLException e){
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
         return null;
     }
