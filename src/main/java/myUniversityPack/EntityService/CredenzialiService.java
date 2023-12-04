@@ -72,6 +72,29 @@ public class CredenzialiService implements DatabaseService<Credenziali> {
         return null;
     }
 
+    public Credenziali findByUsernameAndPassword(String username, String password) {
+        String query = "SELECT * FROM CREDENZIALI WHERE CREDENZIALI.USERNAME = ? AND CREDENZIALI.PASSWORD = ?";
+        try(Connection c = DriverManagerConnectionPool.getConnection()){
+            try(PreparedStatement stm = c.prepareStatement(query)){
+                stm.setString(1, username);
+                stm.setString(2, password);
+                try(ResultSet rs = stm.executeQuery()){
+                    Credenziali credenziali = new Credenziali();
+                    while(rs.next()){
+                        credenziali.setId(rs.getInt("ID"));
+                        credenziali.setUsername(rs.getString("USERNAME"));
+                        credenziali.setPassword(rs.getString("PASSWORD"));
+                        credenziali.setMatricola_studente(rs.getString("MATRICOLA_STUDENTE"));
+                    }
+                    return credenziali;
+                }
+            }
+        }catch (SQLException e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+        return null;
+    }
+
     @Override
     public Credenziali findById(String id) {
         return this.findById(Integer.parseInt(id));
