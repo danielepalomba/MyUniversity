@@ -1,20 +1,18 @@
-package myUniversityPack.Entity;
-
-import myUniversityPack.DbUtil.DriverManagerConnectionPool;
-import myUniversityPack.EntityService.DatabaseService;
+package myUniversityPack.entity;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Studente{
+public class Studente {
     private String matricola;
     private String nome;
     private String cognome;
     private String indirizzo;
     private String cellulare;
-    private Date data_di_nascita;
-    private Date data_di_immatricolazione;
+    private Timestamp data_di_nascita;
+    private Timestamp data_di_immatricolazione;
     private int id_dipartimento;
     private Credenziali credenziali;
     private List<EsameStudente> esami;
@@ -22,7 +20,7 @@ public class Studente{
     public Studente() {
     }
 
-    public Studente(String matricola, String nome, String cognome, String indirizzo, String cellulare, Date data_di_nascita, Date data_di_immatricolazione, int id_dipartimento) {
+    public Studente(String matricola, String nome, String cognome, String indirizzo, String cellulare, Timestamp data_di_nascita, Timestamp data_di_immatricolazione, int id_dipartimento) {
         this.matricola = matricola;
         this.nome = nome;
         this.cognome = cognome;
@@ -74,19 +72,19 @@ public class Studente{
         this.cellulare = cellulare;
     }
 
-    public Date getData_di_nascita() {
+    public Timestamp getData_di_nascita() {
         return data_di_nascita;
     }
 
-    public void setData_di_nascita(Date data_di_nascita) {
+    public void setData_di_nascita(Timestamp data_di_nascita) {
         this.data_di_nascita = data_di_nascita;
     }
 
-    public Date getData_di_immatricolazione() {
+    public Timestamp getData_di_immatricolazione() {
         return data_di_immatricolazione;
     }
 
-    public void setData_di_immatricolazione(Date data_di_immatricolazione) {
+    public void setData_di_immatricolazione(Timestamp data_di_immatricolazione) {
         this.data_di_immatricolazione = data_di_immatricolazione;
     }
 

@@ -1,4 +1,4 @@
-package myUniversityPack.DbUtil;
+package myUniversityPack.dbUtil;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

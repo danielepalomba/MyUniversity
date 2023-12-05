@@ -1,10 +1,11 @@
 package myUniversityPack.login;
 
 
-import myUniversityPack.Entity.Credenziali;
-import myUniversityPack.Entity.Studente;
-import myUniversityPack.EntityService.CredenzialiService;
-import myUniversityPack.EntityService.StudenteService;
+import myUniversityPack.entity.Credenziali;
+import myUniversityPack.entity.Studente;
+import myUniversityPack.entityService.CredenzialiService;
+import myUniversityPack.entityService.StudenteService;
+import myUniversityPack.util.PasswordManager;
 
 public class SecureLogin {
 
@@ -12,12 +13,14 @@ public class SecureLogin {
         CredenzialiService cs = new CredenzialiService();
         StudenteService ss = new StudenteService();
 
-        Credenziali c = cs.findByUsernameAndPassword(username, password);
+        String inputPassword = PasswordManager.encryptPassword(password);
+
+        Credenziali c = cs.findByUsernameAndPassword(username, inputPassword);
         System.out.println(c);
 
         if(c==null)
             throw new RuntimeException("Credenziali errate");
-        else if(c.getUsername().equals(username) && c.getPassword().equals(password))
+        else if(c.getUsername().equals(username) && c.getPassword().equals(inputPassword))
             System.out.println("Login effettuato!");
         else
             throw new RuntimeException("Credenziali errate");

@@ -1,10 +1,9 @@
-package myUniversityPack.EntityService;
+package myUniversityPack.entityService;
 
 
-import myUniversityPack.DbUtil.DriverManagerConnectionPool;
-import myUniversityPack.Entity.Credenziali;
-import myUniversityPack.Entity.EsameStudente;
-import myUniversityPack.Entity.Studente;
+import myUniversityPack.dbUtil.DriverManagerConnectionPool;
+import myUniversityPack.entity.EsameStudente;
+import myUniversityPack.entity.Studente;
 
 import javax.swing.*;
 import java.sql.*;
@@ -26,8 +25,8 @@ public class StudenteService implements DatabaseService<Studente>{
                 stm.setString(3, studente.getCognome());
                 stm.setString(4, studente.getIndirizzo());
                 stm.setString(5, studente.getCellulare());
-                stm.setDate(6, studente.getData_di_nascita());
-                stm.setDate(7, studente.getData_di_immatricolazione());
+                stm.setTimestamp(6, studente.getData_di_nascita());
+                stm.setTimestamp(7, studente.getData_di_immatricolazione());
                 stm.setInt(8, studente.getId_dipartimento());
                 stm.executeUpdate();
                 c.commit();
@@ -70,8 +69,8 @@ public class StudenteService implements DatabaseService<Studente>{
                         String cognome = rs.getString("COGNOME");
                         String indirizzo = rs.getString("INDIRIZZO");
                         String cellulare = rs.getString("CELLULARE");
-                        Date data_di_nascita = rs.getDate("DATA_DI_NASCITA");
-                        Date data_immatricolazione = rs.getDate("DATA_IMMATRICOLAZIONE");
+                        Timestamp data_di_nascita = rs.getTimestamp("DATA_DI_NASCITA");
+                        Timestamp data_immatricolazione = rs.getTimestamp("DATA_IMMATRICOLAZIONE");
                         int id_dipartimento = rs.getInt("ID_DIPARTIMENTO");
                         s = new Studente(matricola, nome, cognome, indirizzo, cellulare, data_di_nascita, data_immatricolazione,id_dipartimento);
                         s.setCredenziali(cs.retrieveByStudente(matricola_s));
@@ -100,8 +99,8 @@ public class StudenteService implements DatabaseService<Studente>{
                         s.setCognome(rs.getString("COGNOME"));
                         s.setIndirizzo(rs.getString("INDIRIZZO"));
                         s.setCellulare(rs.getString("CELLULARE"));
-                        s.setData_di_nascita(rs.getDate("DATA_DI_NASCITA"));
-                        s.setData_di_immatricolazione(rs.getDate("DATA_IMMATRICOLAZIONE"));
+                        s.setData_di_nascita(rs.getTimestamp("DATA_DI_NASCITA"));
+                        s.setData_di_immatricolazione(rs.getTimestamp("DATA_IMMATRICOLAZIONE"));
                         s.setId_dipartimento(rs.getInt("ID_DIPARTIMENTO"));
                         s.setCredenziali(cs.retrieveByStudente(s.getMatricola()));
                         s.setEsami((List<EsameStudente>) es.retrieveByMatricola(s.getMatricola()));

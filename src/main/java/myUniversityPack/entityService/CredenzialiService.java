@@ -1,7 +1,7 @@
-package myUniversityPack.EntityService;
+package myUniversityPack.entityService;
 
-import myUniversityPack.DbUtil.DriverManagerConnectionPool;
-import myUniversityPack.Entity.Credenziali;
+import myUniversityPack.dbUtil.DriverManagerConnectionPool;
+import myUniversityPack.entity.Credenziali;
 
 import javax.swing.*;
 import java.sql.Connection;
@@ -10,7 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 public class CredenzialiService implements DatabaseService<Credenziali> {
     @Override

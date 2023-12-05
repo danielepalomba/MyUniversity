@@ -1,11 +1,10 @@
-package myUniversityPack.EntityService;
+package myUniversityPack.entityService;
 
-import myUniversityPack.DbUtil.DriverManagerConnectionPool;
-import myUniversityPack.Entity.Dipartimento;
-import myUniversityPack.Entity.Esame;
+import myUniversityPack.dbUtil.DriverManagerConnectionPool;
+import myUniversityPack.entity.Dipartimento;
+import myUniversityPack.entity.Esame;
 
 import javax.swing.*;
-import javax.xml.transform.Result;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

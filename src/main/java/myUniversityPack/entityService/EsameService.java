@@ -1,7 +1,7 @@
-package myUniversityPack.EntityService;
+package myUniversityPack.entityService;
 
-import myUniversityPack.DbUtil.DriverManagerConnectionPool;
-import myUniversityPack.Entity.Esame;
+import myUniversityPack.dbUtil.DriverManagerConnectionPool;
+import myUniversityPack.entity.Esame;
 
 import javax.swing.*;
 import java.sql.Connection;

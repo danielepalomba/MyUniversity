@@ -1,4 +1,4 @@
-package myUniversityPack.EntityService;
+package myUniversityPack.entityService;
 
 import java.util.Collection;
 

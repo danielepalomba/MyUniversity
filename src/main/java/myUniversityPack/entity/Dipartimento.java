@@ -1,4 +1,4 @@
-package myUniversityPack.Entity;
+package myUniversityPack.entity;
 
 import java.util.List;
 
